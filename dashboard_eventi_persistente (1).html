@@ -1,0 +1,121 @@
+
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <title>Dashboard Eventi - Spot</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+  <style>
+    body { margin: 0; font-family: Arial, sans-serif; background: #f5f5f5; }
+    header { background: #0a0f2c; color: white; padding: 1rem 2rem; display: flex; justify-content: space-between; align-items: center; }
+    h1 { margin: 0; }
+    .logout { background: #00ffcc; border: none; padding: 0.5rem 1rem; color: #000; border-radius: 5px; font-weight: bold; cursor: pointer; }
+    .content { padding: 2rem; }
+    .event-section, .form-section {
+      background: white; padding: 1.5rem; border-radius: 10px;
+      box-shadow: 0 0 8px rgba(0,0,0,0.1); margin-bottom: 2rem;
+    }
+    .event { border-bottom: 1px solid #eee; padding: 1rem 0; }
+    .event:last-child { border-bottom: none; }
+    .event h3 { margin: 0 0 0.3rem 0; }
+    .event p { margin: 0.2rem 0; }
+    .form-section input { width: 100%; padding: 0.6rem; margin: 0.5rem 0; border-radius: 5px; border: 1px solid #ccc; }
+    .btn { background: #00ffcc; border: none; padding: 0.6rem 1rem; border-radius: 5px; font-weight: bold; cursor: pointer; margin-top: 1rem; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Spot Backoffice</h1>
+    <button class="logout" onclick="logout()">Logout</button>
+  </header>
+  <div class="content">
+    <div class="form-section">
+      <h2>➕ Aggiungi Evento</h2>
+      <input type="text" id="nomeEvento" placeholder="Nome evento">
+      <input type="text" id="luogoEvento" placeholder="Luogo">
+      <input type="date" id="dataEvento">
+      <input type="text" id="prEvento" placeholder="PR responsabile">
+      <button class="btn" onclick="aggiungiEvento()">Aggiungi</button>
+    </div>
+
+    <div class="event-section" id="listaEventi">
+      <h2>📅 Eventi</h2>
+    </div>
+  </div>
+
+  <script>
+    function logout() {
+      netlifyIdentity.logout();
+    }
+
+    netlifyIdentity.on("logout", () => {
+      window.location.href = "/login.html";
+    });
+
+    netlifyIdentity.on("init", user => {
+      if (!user) {
+        window.location.href = "/login.html";
+      }
+    });
+
+    netlifyIdentity.init();
+
+    let eventi = [];
+
+    function salvaEventi() {
+      localStorage.setItem("eventiSpot", JSON.stringify(eventi));
+    }
+
+    function caricaEventi() {
+      const salvati = localStorage.getItem("eventiSpot");
+      if (salvati) {
+        eventi = JSON.parse(salvati);
+      } else {
+        eventi = [
+          { nome: "Disco Flash Palermo", luogo: "Teatro Golden", data: "2025-04-27", pr: "Giulia Events" },
+          { nome: "Urban Vibes", luogo: "Spazio 38", data: "2025-05-02", pr: "Leo Promoter" }
+        ];
+        salvaEventi();
+      }
+    }
+
+    function mostraEventi() {
+      const container = document.getElementById("listaEventi");
+      container.innerHTML = "<h2>📅 Eventi</h2>";
+      eventi.forEach(evento => {
+        const el = document.createElement("div");
+        el.className = "event";
+        el.innerHTML = `<h3>${evento.nome}</h3>
+                        <p>📍 Luogo: ${evento.luogo}</p>
+                        <p>📅 Data: ${evento.data}</p>
+                        <p>👤 PR: ${evento.pr}</p>`;
+        container.appendChild(el);
+      });
+    }
+
+    function aggiungiEvento() {
+      const nome = document.getElementById("nomeEvento").value;
+      const luogo = document.getElementById("luogoEvento").value;
+      const data = document.getElementById("dataEvento").value;
+      const pr = document.getElementById("prEvento").value;
+      if (nome && luogo && data && pr) {
+        eventi.push({ nome, luogo, data, pr });
+        salvaEventi();
+        mostraEventi();
+        document.getElementById("nomeEvento").value = "";
+        document.getElementById("luogoEvento").value = "";
+        document.getElementById("dataEvento").value = "";
+        document.getElementById("prEvento").value = "";
+      } else {
+        alert("Compila tutti i campi");
+      }
+    }
+
+    window.onload = () => {
+      caricaEventi();
+      mostraEventi();
+    }
+  </script>
+</body>
+</html>
