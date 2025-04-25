@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="it">
 <head>
@@ -64,10 +63,21 @@
     <p id="error"></p>
   </div>
 
-  <script type="module" src="firebase-auth.js"></script>
-
   <script type="module">
-    import { loginUser } from './firebase-auth.js';
+    import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js';
+    import { getAuth, signInWithEmailAndPassword } from 'https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js';
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyAJqcvzQBiSV5cNQZ-o_m_9JzBFpmyR8f0",
+      authDomain: "spot-beed1.firebaseapp.com",
+      projectId: "spot-beed1",
+      storageBucket: "spot-beed1.firebasestorage.app",
+      messagingSenderId: "628548567075",
+      appId: "1:628548567075:web:34405c7d4a206a027c3196"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
 
     const form = document.getElementById("loginForm");
     const emailInput = document.getElementById("email");
@@ -80,11 +90,11 @@
       const password = passwordInput.value;
 
       try {
-        await loginUser(email, password);
+        await signInWithEmailAndPassword(auth, email, password);
         window.location.href = 'dashboard.html';
       } catch (error) {
-        errorBox.textContent = "Email o password errati.";
         console.error("Login error:", error.code, error.message);
+        errorBox.textContent = "Errore: " + error.message;
       }
     });
   </script>
