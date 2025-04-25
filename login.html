@@ -24,16 +24,13 @@
       backdrop-filter: blur(10px);
       width: 300px;
     }
-    h1 {
-      color: #00ffcc;
-      margin-bottom: 1rem;
-    }
     input {
+      display: block;
+      margin: 1rem auto;
+      padding: 0.8rem;
       width: 100%;
-      padding: 0.6rem;
-      margin-bottom: 1rem;
-      border: none;
       border-radius: 5px;
+      border: none;
     }
     button {
       background: #00ffcc;
@@ -43,10 +40,9 @@
       color: #000;
       border-radius: 5px;
       cursor: pointer;
-      width: 100%;
     }
     #error {
-      color: #ff4d4d;
+      color: red;
       margin-top: 1rem;
     }
   </style>
@@ -55,23 +51,22 @@
   <div class="login-box">
     <h1>Spot Backoffice</h1>
     <p>Accedi con il tuo account</p>
-    <form id="loginForm">
-      <input type="email" id="email" placeholder="Email" required>
-      <input type="password" id="password" placeholder="Password" required>
-      <button type="submit">Accedi</button>
-    </form>
-    <p id="error"></p>
+    <input type="email" id="email" placeholder="Email">
+    <input type="password" id="password" placeholder="Password">
+    <button id="loginBtn">Accedi</button>
+    <div id="error"></div>
   </div>
 
+  <!-- Firebase core -->
   <script type="module">
-    import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js';
-    import { getAuth, signInWithEmailAndPassword } from 'https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js';
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
+    import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
 
     const firebaseConfig = {
       apiKey: "AIzaSyAJqcvzQBiSV5cNQZ-o_m_9JzBFpmyR8f0",
       authDomain: "spot-beed1.firebaseapp.com",
       projectId: "spot-beed1",
-      storageBucket: "spot-beed1.firebasestorage.app",
+      storageBucket: "spot-beed1.appspot.com",
       messagingSenderId: "628548567075",
       appId: "1:628548567075:web:34405c7d4a206a027c3196"
     };
@@ -79,23 +74,22 @@
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
 
-    const form = document.getElementById("loginForm");
-    const emailInput = document.getElementById("email");
-    const passwordInput = document.getElementById("password");
+    const loginBtn = document.getElementById("loginBtn");
     const errorBox = document.getElementById("error");
 
-    form.addEventListener("submit", async (e) => {
-      e.preventDefault();
-      const email = emailInput.value;
-      const password = passwordInput.value;
+    loginBtn.addEventListener("click", () => {
+      const email = document.getElementById("email").value.trim();
+      const password = document.getElementById("password").value.trim();
 
-      try {
-        await signInWithEmailAndPassword(auth, email, password);
-        window.location.href = 'dashboard.html';
-      } catch (error) {
-        console.error("Login error:", error.code, error.message);
-        errorBox.textContent = "Errore: " + error.message;
-      }
+      signInWithEmailAndPassword(auth, email, password)
+        .then((userCredential) => {
+          // Login OK
+          window.location.href = "dashboard.html";
+        })
+        .catch((error) => {
+          errorBox.textContent = "Credenziali errate. Riprova.";
+          console.error("Login error:", error);
+        });
     });
   </script>
 </body>
