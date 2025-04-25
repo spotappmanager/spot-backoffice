@@ -61,5 +61,30 @@
 
     netlifyIdentity.init();
   </script>
+<!-- Firebase Auth -->
+<script type="module" src="firebase-auth.js"></script>
+
+<script type="module">
+  import { loginUser } from './firebase-auth.js';
+
+  const form = document.querySelector('form');
+  const emailInput = document.querySelector('#email');
+  const passwordInput = document.querySelector('#password');
+  const errorBox = document.querySelector('#error');
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const email = emailInput.value;
+    const password = passwordInput.value;
+
+    try {
+      await loginUser(email, password);
+      window.location.href = 'dashboard.html'; // reindirizza dopo login
+    } catch (error) {
+      errorBox.textContent = "Email o password errati.";
+    }
+  });
+</script>
+
 </body>
 </html>
