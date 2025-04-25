@@ -2,51 +2,110 @@
 <html lang="it">
 <head>
   <meta charset="UTF-8">
-  <title>Dashboard - Spot Backoffice</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>spot - Dashboard</title>
+  <link rel="icon" type="image/png" href="assets/logo-spot.png">
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      background-color: #f4f4f4;
+    * {
+      box-sizing: border-box;
       margin: 0;
       padding: 0;
+    }
+    body {
+      display: flex;
+      min-height: 100vh;
+      font-family: Arial, sans-serif;
+      background-color: #f4f8fb;
+    }
+    .sidebar {
+      width: 250px;
+      background-color: #0a0f2c;
+      padding: 2rem 1rem;
       display: flex;
       flex-direction: column;
-      align-items: center;
+      justify-content: space-between;
     }
-    header {
-      background-color: #0a0f2c;
-      color: white;
-      padding: 1rem;
-      width: 100%;
+    .sidebar h2 {
+      color: #00ffcc;
       text-align: center;
+      margin-bottom: 2rem;
     }
-    main {
-      margin-top: 2rem;
-      width: 90%;
-      max-width: 1000px;
+    .sidebar nav a {
+      display: block;
+      color: #ccc;
+      text-decoration: none;
+      padding: 1rem;
+      border-radius: 8px;
+      margin-bottom: 1rem;
+      transition: background 0.3s;
+    }
+    .sidebar nav a:hover {
+      background-color: #0e4668;
+    }
+    .main-content {
+      flex-grow: 1;
+      padding: 2rem;
+    }
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 2rem;
+    }
+    .topbar h1 {
+      font-size: 2rem;
+      color: #0a0f2c;
+    }
+    .logout-button {
+      background-color: #00ffcc;
+      border: none;
+      padding: 0.6rem 1.2rem;
+      border-radius: 8px;
+      color: #0a0f2c;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+    .logout-button:hover {
+      background-color: #0e4668;
+      color: #fff;
     }
   </style>
 </head>
 <body>
-  <header>
-    <h1>Dashboard PR - Spot Backoffice</h1>
-  </header>
+  <aside class="sidebar">
+    <div>
+      <h2>spot</h2>
+      <nav>
+        <a href="#">Eventi Online</a>
+        <a href="#">Eventi Passati</a>
+        <a href="#">PR/Collaboratori</a>
+        <a href="#">Utenti</a>
+        <a href="#">Statistiche</a>
+        <a href="#">Impostazioni</a>
+      </nav>
+    </div>
+    <button class="logout-button" onclick="logout()">Logout</button>
+  </aside>
 
-  <main>
-    <p>Benvenuto nella dashboard!</p>
-    <!-- Qui puoi inserire contenuti dinamici -->
+  <main class="main-content">
+    <div class="topbar">
+      <h1>Benvenuto su Spot!</h1>
+    </div>
+    <section>
+      <p>Seleziona una sezione dal menu per iniziare a gestire i tuoi eventi, PR e utenti.</p>
+    </section>
   </main>
 
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
-    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
+    import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
 
     const firebaseConfig = {
       apiKey: "AIzaSyAJqcvzQBiSV5cNQZ-o_m_9JzBFpmyR8f0",
       authDomain: "spot-beed1.firebaseapp.com",
       projectId: "spot-beed1",
-      storageBucket: "spot-beed1.firebasestorage.app",
+      storageBucket: "spot-beed1.appspot.com",
       messagingSenderId: "628548567075",
       appId: "1:628548567075:web:34405c7d4a206a027c3196"
     };
@@ -55,15 +114,18 @@
     const auth = getAuth(app);
 
     onAuthStateChanged(auth, (user) => {
-      if (user) {
-        console.log("Utente loggato:", user.email);
-      } else {
-        console.log("Nessun utente loggato");
-        setTimeout(() => {
-          window.location.href = "login.html";
-        }, 1000);
+      if (!user) {
+        window.location.href = "login.html";
       }
     });
+
+    function logout() {
+      signOut(auth).then(() => {
+        window.location.href = "login.html";
+      }).catch((error) => {
+        console.error("Logout error:", error);
+      });
+    }
   </script>
 </body>
 </html>
