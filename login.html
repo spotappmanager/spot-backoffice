@@ -1,0 +1,58 @@
+
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <title>Login - Spot Backoffice</title>
+  <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #0a0f2c;
+      color: white;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+    .login-box {
+      background: #ffffff10;
+      padding: 2rem;
+      border-radius: 10px;
+      text-align: center;
+      box-shadow: 0 0 10px #00000050;
+    }
+    h1 {
+      color: #00ffcc;
+    }
+    button {
+      background: #00ffcc;
+      border: none;
+      padding: 0.8rem 1.5rem;
+      font-size: 1rem;
+      color: #000;
+      border-radius: 5px;
+      cursor: pointer;
+      margin-top: 1rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="login-box">
+    <h1>Spot Backoffice</h1>
+    <p>Accedi per entrare nella dashboard</p>
+    <button onclick="netlifyIdentity.open()">Login</button>
+  </div>
+
+  <script>
+    netlifyIdentity.on('init', user => {
+      if (user) window.location.href = "/index.html";
+    });
+    netlifyIdentity.on('login', user => {
+      window.location.href = "/index.html";
+    });
+    netlifyIdentity.init();
+  </script>
+</body>
+</html>
