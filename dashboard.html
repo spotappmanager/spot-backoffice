@@ -1,123 +1,69 @@
-
 <!DOCTYPE html>
 <html lang="it">
-<script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
-  import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
-
-  const firebaseConfig = {
-    apiKey: "AIzaSyAJqcvzQBiSV5cNQZ-o_m_9JzBFpmyR8f0",
-    authDomain: "spot-beed1.firebaseapp.com",
-    projectId: "spot-beed1",
-    storageBucket: "spot-beed1.firebasestorage.app",
-    messagingSenderId: "628548567075",
-    appId: "1:628548567075:web:34405c7d4a206a027c3196"
-  };
-
-  const app = initializeApp(firebaseConfig);
-  const auth = getAuth(app);
-
-  onAuthStateChanged(auth, (user) => {
-    if (!user) {
-      window.location.href = "login.html";
-    }
-  });
-</script>
-
-  <head>
+<head>
   <meta charset="UTF-8">
   <title>Dashboard - Spot Backoffice</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
   <style>
     body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
       margin: 0;
-      font-family: 'Segoe UI', sans-serif;
-      background: #f5f5f5;
-      color: #333;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
     }
     header {
       background-color: #0a0f2c;
       color: white;
-      padding: 1rem 2rem;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
+      padding: 1rem;
+      width: 100%;
+      text-align: center;
     }
-    h1 {
-      margin: 0;
-    }
-    .logout {
-      background: #00ffcc;
-      border: none;
-      padding: 0.5rem 1rem;
-      color: #000;
-      border-radius: 5px;
-      font-weight: bold;
-      cursor: pointer;
-    }
-    .content {
-      padding: 2rem;
-    }
-    .welcome {
-      font-size: 1.2rem;
-      margin-bottom: 1.5rem;
-    }
-    .section {
-      background: white;
-      padding: 1.5rem;
-      border-radius: 10px;
-      box-shadow: 0 0 8px rgba(0,0,0,0.1);
-      margin-bottom: 1.5rem;
-    }
-    .section h2 {
-      margin-top: 0;
+    main {
+      margin-top: 2rem;
+      width: 90%;
+      max-width: 1000px;
     }
   </style>
 </head>
 <body>
   <header>
-    <h1>Spot Backoffice</h1>
-    <button class="logout" onclick="logout()">Logout</button>
+    <h1>Dashboard PR - Spot Backoffice</h1>
   </header>
-  <div class="content">
-    <div class="welcome" id="welcomeMsg">Benvenuto!</div>
 
-    <div class="section">
-      <h2>Statistiche</h2>
-      <p>Eventi attivi: 3</p>
-      <p>Utenti registrati: 18</p>
-      <p>PR attivi: 5</p>
-    </div>
+  <main>
+    <p>Benvenuto nella dashboard!</p>
+    <!-- Qui puoi inserire contenuti dinamici -->
+  </main>
 
-    <div class="section">
-      <h2>Ultime attività</h2>
-      <ul>
-        <li>Giulia Events ha aggiunto un nuovo evento</li>
-        <li>Leo Promoter ha aggiornato la classifica</li>
-        <li>Ari Clubber ha raggiunto 1000 punti</li>
-      </ul>
-    </div>
-  </div>
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
+    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
 
-  <script>
-    function logout() {
-      netlifyIdentity.logout();
-    }
+    const firebaseConfig = {
+      apiKey: "AIzaSyAJqcvzQBiSV5cNQZ-o_m_9JzBFpmyR8f0",
+      authDomain: "spot-beed1.firebaseapp.com",
+      projectId: "spot-beed1",
+      storageBucket: "spot-beed1.firebasestorage.app",
+      messagingSenderId: "628548567075",
+      appId: "1:628548567075:web:34405c7d4a206a027c3196"
+    };
 
-    netlifyIdentity.on("logout", () => {
-      window.location.href = "/login.html";
-    });
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
 
-    netlifyIdentity.on("init", user => {
-      if (!user) {
-        window.location.href = "/login.html";
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        console.log("Utente loggato:", user.email);
       } else {
-        document.getElementById("welcomeMsg").innerText = "Benvenuto, " + user.user_metadata.full_name + "!";
+        console.log("Nessun utente loggato");
+        setTimeout(() => {
+          window.location.href = "login.html";
+        }, 1000);
       }
     });
-
-    netlifyIdentity.init();
   </script>
 </body>
 </html>
