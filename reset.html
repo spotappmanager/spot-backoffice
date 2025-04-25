@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <title>Reset Password - Spot</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
+    import { getAuth, confirmPasswordReset } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyAJqcvzQBiSV5cNQZ-o_m_9JzBFpmyR8f0",
+      authDomain: "spot-beed1.firebaseapp.com",
+      projectId: "spot-beed1",
+      storageBucket: "spot-beed1.firebasestorage.app",
+      messagingSenderId: "628548567075",
+      appId: "1:628548567075:web:34405c7d4a206a027c3196"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+
+    const urlParams = new URLSearchParams(window.location.search);
+    const oobCode = urlParams.get("oobCode");
+
+    async function handleReset() {
+      const newPassword = document.getElementById("new-password").value;
+      try {
+        await confirmPasswordReset(auth, oobCode, newPassword);
+        alert("Password aggiornata con successo!");
+        window.location.href = "login.html";
+      } catch (error) {
+        alert("Errore: " + error.message);
+      }
+    }
+
+    window.handleReset = handleReset;
+  </script>
+  <style>
+    body { font-family: sans-serif; background: #f9f9f9; padding: 2rem; display: flex; justify-content: center; align-items: center; height: 100vh; }
+    .card { background: white; padding: 2rem; border-radius: 10px; box-shadow: 0 0 15px rgba(0,0,0,0.1); width: 100%; max-width: 400px; }
+    input { width: 100%; padding: 0.8rem; margin-bottom: 1rem; border: 1px solid #ccc; border-radius: 5px; }
+    button { padding: 0.8rem 1.2rem; background: #00ffcc; border: none; font-weight: bold; border-radius: 5px; cursor: pointer; width: 100%; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h2>Reimposta la tua password</h2>
+    <input type="password" id="new-password" placeholder="Nuova password" />
+    <button onclick="handleReset()">Conferma nuova password</button>
+  </div>
+</body>
+</html>
