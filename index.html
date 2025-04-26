@@ -3,83 +3,73 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Spot Backoffice</title>
-  <link rel="icon" href="assets/favicon.ico">
-  <link rel="stylesheet" href="css/style.css">
-  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js"></script>
-  <script defer src="js/main.js"></script>
+  <title>Spot - Scopri. Vivi. Condividi.</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="icon" type="image/png" href="images/favicon.png">
 </head>
 <body>
 
-  <header>
-    <h1>Spot</h1>
-    <p class="slogan">Scopri. Vivi. Condividi.</p>
-    <button onclick="logout()">Logout</button>
-  </header>
-
-  <main id="main-content" class="hidden">
-    <div class="section">
-      <h2>Dashboard</h2>
-      <p id="stats"></p>
-    </div>
-
-    <div class="section">
-      <h2>Gestione Eventi</h2>
-      <button onclick="showAddEventForm()">Aggiungi Evento</button>
-      <div id="add-event-form" class="hidden">
-        <input type="text" id="event-title" placeholder="Titolo Evento"><br><br>
-        <input type="text" id="event-location" placeholder="Luogo Evento"><br><br>
-        <input type="date" id="event-date"><br><br>
-        <button onclick="addEvent()">Salva Evento</button>
-      </div>
-      <div class="table-container">
-        <table>
-          <thead>
-            <tr><th>Titolo</th><th>Luogo</th><th>Data</th></tr>
-          </thead>
-          <tbody id="events-table-body"></tbody>
-        </table>
-      </div>
-    </div>
-
-    <div class="section">
-      <h2>Gestione Utenti</h2>
-      <div class="table-container">
-        <table>
-          <thead>
-            <tr><th>Email</th><th>Ruolo</th></tr>
-          </thead>
-          <tbody id="users-table-body"></tbody>
-        </table>
-      </div>
-    </div>
-
-    <div class="section">
-      <h2>Segnalazioni</h2>
-      <div class="table-container">
-        <table>
-          <thead>
-            <tr><th>Tipo</th><th>Descrizione</th><th>Data</th></tr>
-          </thead>
-          <tbody id="reports-table-body"></tbody>
-        </table>
-      </div>
-    </div>
-
-    <div class="section">
-      <h2>Centro Assistenza</h2>
-      <p>Gestione ticket di supporto automatizzato e richieste utenti in arrivo.</p>
-    </div>
-  </main>
-
-  <div id="login-section">
-    <h2>Accedi</h2>
-    <input type="email" id="email" placeholder="Email"><br><br>
-    <input type="password" id="password"><br><br>
-    <button onclick="login()">Login</button>
+<header class="topbar">
+  <img src="images/spot-logo.png" alt="Spot Logo" class="logo">
+  <div class="topbar-buttons">
+    <button id="roleBtn">Ruolo</button>
+    <button id="liveNowBtn">Segnala adesso</button>
+    <button id="settingsBtn">Impostazioni</button>
   </div>
+</header>
 
+<section class="date-bar" id="dateBar"></section>
+
+<section class="live-now" id="liveNowSection">
+  <h3>Live Now</h3>
+  <div id="liveNowFeed"></div>
+</section>
+
+<div class="feed" id="feed"></div>
+
+<!-- Modal Ruolo -->
+<div class="modal hidden" id="roleModal">
+  <div class="modal-content">
+    <h3>Scegli il tuo ruolo</h3>
+    <button class="choose-role" data-role="Utente">Utente</button>
+    <button class="choose-role" data-role="PR">PR</button>
+    <button class="choose-role" data-role="Organizzatore">Organizzatore</button>
+    <button class="close-btn">Chiudi</button>
+  </div>
+</div>
+
+<!-- Modal Live Now -->
+<div class="modal hidden" id="liveModal">
+  <div class="modal-content">
+    <h3>Segnala Evento Live</h3>
+    <input type="text" id="liveTitle" placeholder="Titolo evento">
+    <input type="text" id="liveLocation" placeholder="Luogo">
+    <textarea id="liveDescription" placeholder="Descrizione breve"></textarea>
+    <button id="sendLive">Invia Segnalazione</button>
+    <button class="close-btn">Chiudi</button>
+  </div>
+</div>
+
+<!-- Modal Impostazioni -->
+<div class="modal hidden" id="settingsModal">
+  <div class="modal-content settings-guide">
+    <h3>Come funziona Spot</h3>
+    <p><strong>Cos'è Spot:</strong> Scopri, vivi e condividi eventi veri e live.</p>
+    <p><strong>Ruoli:</strong> Utente semplice, PR (promoter), Organizzatore di eventi.</p>
+    <p><strong>Eventi Live Now:</strong> Segnala eventi in tempo reale. Rimangono visibili per 1 ora.</p>
+    <p><strong>Sicurezza:</strong> Monitoriamo attività, puoi segnalare eventi o utenti irregolari. Gli eventi falsi vengono rimossi subito.</p>
+    <p><strong>Privacy:</strong> Spot protegge i tuoi dati e promuove il rispetto tra gli utenti.</p>
+    <button class="close-btn">Chiudi</button>
+  </div>
+</div>
+
+<!-- Firebase SDK -->
+<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-storage.js"></script>
+
+<script src="firebase-config.js"></script>
+<script src="script.js"></script>
 </body>
 </html>
